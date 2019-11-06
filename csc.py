@@ -8,4 +8,3 @@ coeffient = []
 for i in range(f+1):
     coeffient.append(input("Enter Coefficient of order " + format(i) + ": "))
 
-
