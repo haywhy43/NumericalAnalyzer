@@ -22,7 +22,8 @@ fx = fx + "0"
 fx = parse_expr(fx, transformations=transformations)
 
 fx_prime = fx.diff(x)
-
+print(fx)
+print(fx_prime)
 fx = lambdify(x, fx)
 fx_prime = lambdify(x, fx_prime)
 
@@ -47,17 +48,19 @@ f_prime_of_x = fx_prime(x_guess)
 iteration = x_guess
 
 
-def newton(param):
-    new_iteration = param + (fx(param) / fx_prime(param))
+def newton(f, Df, x0, epsilon, max_iter):
+    xn = x0
+    for n in range(0, max_iter):
+        fxn = f(xn)
+        if abs(fxn) < epsilon:
+            print('Found solution after', n, 'iterations.')
+            return xn
+        Dfxn = Df(xn)
+        if Dfxn == 0:
+            print('Zero derivative. No solution found.')
+            return None
+        xn = xn - fxn / Dfxn
+    print('Exceeded maximum iterations. No solution found.')
+    return None
 
-    return new_iteration
-
-
-new_iteration = newton(iteration)
-
-while new_iteration != iteration:
-    newton(newton(iteration))
-    iteration = new_iteration
-
-print(new_iteration)
-print(iteration)
+print(newton(fx, fx_prime, x_guess, 1e-8, 10))
